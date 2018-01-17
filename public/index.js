@@ -42,7 +42,7 @@ var deliveries = [{
   'id': '65203b0a-a864-4dea-81e2-e389515752a8',
   'shipper': 'librairie-lu-cie',
   'truckerId': '165d65ec-5e3f-488e-b371-d56ee100aa58',
-  'distance': 500,
+  'distance': 650,
   'volume': 12,
   'options': {
     'deductibleReduction': true
@@ -128,7 +128,10 @@ const actors = [{
     'amount': 0
   }]
 }];
-
-console.log(truckers);
-console.log(deliveries);
-console.log(actors);
+function UpdatePrice() {
+  for (var i = 0; i < Object.keys(deliveries).length; i++) {
+      deliveries[i]['price'] = deliveries[i]['distance'] + deliveries[i]['volume'];
+      console.log(deliveries[i]['price']);
+    }
+}
+UpdatePrice();
