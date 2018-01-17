@@ -36,7 +36,8 @@ var deliveries = [{
   'price': 0,
   'commission': {
     'insurance': 0,
-    'convargo': 0
+    'convargo': 0,
+    'treasury': 0
   }
 }, {
   'id': '65203b0a-a864-4dea-81e2-e389515752a8',
@@ -50,7 +51,8 @@ var deliveries = [{
   'price': 0,
   'commission': {
     'insurance': 0,
-    'convargo': 0
+    'convargo': 0,
+    'treasury': 0
   }
 }, {
   'id': '94dab739-bd93-44c0-9be1-52dd07baa9f6',
@@ -64,7 +66,9 @@ var deliveries = [{
   'price': 0,
   'commission': {
     'insurance': 0,
-    'convargo': 0
+    'convargo': 0,
+    'treasury': 0
+
   }
 }];
 
@@ -130,8 +134,20 @@ const actors = [{
 }];
 function UpdatePrice() {
   for (var i = 0; i < Object.keys(deliveries).length; i++) {
-      deliveries[i]['price'] = deliveries[i]['distance'] + deliveries[i]['volume'];
-      console.log(deliveries[i]['price']);
+    var pricePerKm = 0;
+    var pricePerVolume = 0;
+    for(var j = 0; j < Object.keys(truckers).length; j++)
+    {
+      if(truckers[j]['id'] == deliveries[i]['truckerId'])
+      {
+        pricePerKm = truckers[j]['pricePerKm'];
+        pricePerVolume = truckers[j]['pricePerVolume'];
+        break;
+      }
+    }
+
+      deliveries[i]['price'] = deliveries[i]['distance']*pricePerKm + deliveries[i]['volume']*pricePerVolume;
+      //console.log(deliveries[i]['price']);
     }
 }
 UpdatePrice();
@@ -151,8 +167,21 @@ function SendMorePayLess()
       {
         deliveries[i]['price'] = deliveries[i]['price']*0.9;
       }
-      console.log(deliveries[i]['price']);
+     console.log(deliveries[i]['price']);
     }
 
 }
 SendMorePayLess();
+
+function GiveMeAllYourMoney()
+{
+  for(var i = 0;i < Object.keys(deliveries).length;i++)
+  {
+    deliveries[i]['commission']['insurance'] = deliveries[i]['price']*0.3*0.5;
+    deliveries[i]['commission']['treasury'] = Math.ceil(deliveries[i]['distance']/500);
+    deliveries[i]['commission']['convargo'] = deliveries[i]['price']*0.3 - deliveries[i]['commission']['insurance'] - deliveries[i]['commission']['treasury'];
+   console.log(deliveries[i]['commission']);
+  }
+}
+
+GiveMeAllYourMoney();
