@@ -146,32 +146,32 @@ function UpdatePrice() {
       }
     }
 
-      deliveries[i]['price'] = deliveries[i]['distance']*pricePerKm + deliveries[i]['volume']*pricePerVolume;
-      //console.log(deliveries[i]['price']);
+      deliveries[i]['price'] = deliveries[i]['distance']*pricePerKm + deliveries[i]['volume']*pricePerVolume*SendMorePayLess(i);
+      console.log(deliveries[i]['price']);
     }
 }
 UpdatePrice();
 
-function SendMorePayLess()
+function SendMorePayLess(i)
 {
-  for (var i = 0; i < Object.keys(deliveries).length; i++) {
       if(deliveries[i]['volume'] > 25)
       {
-        deliveries[i]['price'] = deliveries[i]['price']*0.5;
+        return 0.5;
       }
       else if(deliveries[i]['volume'] > 10)
       {
-        deliveries[i]['price'] = deliveries[i]['price']*0.7;
+        return 0.7;
       }
       else if(deliveries[i]['volume'] > 5)
       {
-        deliveries[i]['price'] = deliveries[i]['price']*0.9;
+        return 0.9;
       }
-     console.log(deliveries[i]['price']);
-    }
+      return 1;
+  //   console.log(deliveries[i]['price']);
 
 }
-SendMorePayLess();
+
+
 
 function GiveMeAllYourMoney()
 {
@@ -180,8 +180,31 @@ function GiveMeAllYourMoney()
     deliveries[i]['commission']['insurance'] = deliveries[i]['price']*0.3*0.5;
     deliveries[i]['commission']['treasury'] = Math.ceil(deliveries[i]['distance']/500);
     deliveries[i]['commission']['convargo'] = deliveries[i]['price']*0.3 - deliveries[i]['commission']['insurance'] - deliveries[i]['commission']['treasury'];
-   console.log(deliveries[i]['commission']);
+   //console.log(deliveries[i]['commission']);
   }
 }
 
 GiveMeAllYourMoney();
+
+
+function DeductibleReduction()
+{
+  for(var i = 0;i < Object.keys(deliveries).length;i++)
+  {
+    if(deliveries[i]['options']['deductibleReduction'] == true)
+    {
+      deliveries[i]['price'] += deliveries[i]['volume'];
+      deliveries[i]['commission']['convargo'] += deliveries[i]['volume'];
+    }
+    //console.log(deliveries[i]['commission']);
+
+  }
+}
+
+DeductibleReduction();
+
+
+function PayTheActors()
+{
+
+}
