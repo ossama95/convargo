@@ -84,23 +84,8 @@ const actors = [{
     'who': 'owner',
     'type': 'credit',
     'amount': 0
-  }, {
-    'who': 'insurance',
-    'type': 'credit',
-    'amount': 0
-  }, {
-    'who': 'convargo',
-    'type': 'credit',
-    'amount': 0
-  }]
-}, {
-  'rentalId': '65203b0a-a864-4dea-81e2-e389515752a8',
-  'payment': [{
-    'who': 'shipper',
-    'type': 'debit',
-    'amount': 0
-  }, {
-    'who': 'owner',
+  },{
+    'who': 'treasury',
     'type': 'credit',
     'amount': 0
   }, {
@@ -113,13 +98,40 @@ const actors = [{
     'amount': 0
   }]
 }, {
-  'rentalId': '94dab739-bd93-44c0-9be1-52dd07baa9f6',
+  'deliveryId': '65203b0a-a864-4dea-81e2-e389515752a8',
   'payment': [{
     'who': 'shipper',
     'type': 'debit',
     'amount': 0
   }, {
     'who': 'owner',
+    'type': 'credit',
+    'amount': 0
+  }, {
+    'who': 'treasury',
+    'type': 'credit',
+    'amount': 0
+  }, {
+    'who': 'insurance',
+    'type': 'credit',
+    'amount': 0
+  }, {
+    'who': 'convargo',
+    'type': 'credit',
+    'amount': 0
+  }]
+}, {
+  'deliveryId': '94dab739-bd93-44c0-9be1-52dd07baa9f6',
+  'payment': [{
+    'who': 'shipper',
+    'type': 'debit',
+    'amount': 0
+  }, {
+    'who': 'owner',
+    'type': 'credit',
+    'amount': 0
+  }, {
+    'who': 'treasury',
     'type': 'credit',
     'amount': 0
   }, {
@@ -204,7 +216,31 @@ function DeductibleReduction()
 DeductibleReduction();
 
 
+function getIndexOfDeliveries(id)
+{
+  for(var i = 0; i < Object.keys(deliveries).length;i++)
+  {
+    if(deliveries[i]['id'] == id)
+    {
+      return i;
+    }
+  }
+}
+
 function PayTheActors()
 {
+  for(var i = 0;i < Object.keys(actors).length;i++)
+  {
+    var j = getIndexOfDeliveries(actors[i]['deliveryId']);
+    actors[i]["payment"][0]['amount'] = deliveries[j]['price'];
+    actors[i]["payment"][1]['amount'] = deliveries[j]['price']*0.7;
+    actors[i]["payment"][2]['amount'] = deliveries[j]['commission']['treasury'];
+    actors[i]["payment"][2]['amount'] = deliveries[j]['commission']['insurance'];
+    actors[i]["payment"][3]['amount'] = deliveries[j]['commission']['convargo'];
 
+    console.log(actors);
+  }
 }
+
+
+PayTheActors();
